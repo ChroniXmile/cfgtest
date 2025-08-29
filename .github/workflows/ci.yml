@@ -26,16 +26,20 @@ jobs:
           cache-dependency-glob: |
             pyproject.toml
 
+      - name: Create venv
+        run: uv venv .venv
+
       - name: Install project and tools
         run: |
+          source .venv/bin/activate
           uv pip install -e .
           uv pip install ruff black pytest
 
       - name: Ruff (lint)
-        run: ruff check .
+        run: source .venv/bin/activate && ruff check .
 
       - name: Black (format check)
-        run: black --check .
+        run: source .venv/bin/activate && black --check .
 
       - name: Pytest
-        run: pytest
+        run: source .venv/bin/activate && pytest
